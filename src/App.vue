@@ -18,16 +18,15 @@
 </script>
 
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Recursive:wght@300;400&display=swap');
-  @import url('https://fonts.googleapis.com/css2?family=Poppins&family=Recursive:wght@300;400&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=PT+Sans&display=swap&family=Quicksand:wght@500');
 
   :root {
     --header-height: 40px;
     --padding: 10px;
     --text-color: #f5f5f5;
-    --color-primary: #033b5c;
-    --color-primary-dark: #031c3c;
-    --color-hint: #999;
+    --color-primary: #2a4865;
+    --color-primary-dark: #051e34;
+    --color-hint: #bbb;
     --color-accent: #4682b4;
     --color-transparent: rgba(255, 255, 255, 0.1);
     --color-danger: #ff0000;
@@ -48,29 +47,28 @@
   }
 
   a:hover, a:active {
-    color: var(--color-accent);
+    color: var(--color-accent)
   }
 
   .btn {
     display: inline-block;
-    border-radius: 20px;
     padding: var(--padding) calc(var(--padding) * 2);
     background-color: var(--color-primary-dark);
-    font-family: "Poppins", sans-serif;
+    font-family: 'Quicksand', sans-serif;
     color: var(--text-color);
     font-size: 16px;
-    cursor: pointer;
+    cursor: pointer
   }
 
   #app {
-    font-family: 'Recursive', sans-serif;
+    font-family: 'PT Sans', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: var(--text-color)
   }
 
   .heading {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Quicksand', sans-serif;
     margin: calc(var(--padding) / 2) 0
   }
 
@@ -90,7 +88,7 @@
 
   .hint {
     color: var(--color-hint);
-    font-size: 12px
+    font-size: 13px
   }
 
   .image-circle {
@@ -99,7 +97,7 @@
     display: inline-block;
     width: 120px;
     height: 120px;
-    position: relative;
+    position: relative
   }
 
   .image-circle img {

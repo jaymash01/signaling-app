@@ -3,6 +3,12 @@
 import { app, protocol, BrowserWindow } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
+import axios from 'axios'
+import { createServer } from 'http'
+import WebSocket from 'ws'
+import fs from 'fs'
+import {execSync} from 'child_process'
+
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -14,11 +20,56 @@ protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ])
 
+function createWebSocketServer() {
+  let wss = new WebSocket.Server({
+    port: 1445,
+    perMessageDeflate: {
+      zlibDeflateOptions: {
+        chunkSize: 1024,
+        memLevel: 7,
+        level: 3
+      },
+      zlibInflateOptions: {
+        chunkSize: 10 * 1024
+      },
+      clientNoContextTakeover: true,
+      serverNoContextTakeover: true,
+      serverMaxWindowBits: 10,
+      concurrencyLimit: 10,
+      threshold: 1024
+    }})
+
+  wss.on('connection', async (instance) => {
+    let responseData = [], i = 0
+    try {
+      let data = fs.readFileSync('subscriptions.json.txt', 'utf8')
+      let subscriptions = JSON.parse(data)
+      for (; i < subscriptions.length; i++) {
+        let subs = subscriptions[i]
+        let apiResponse = await axios.get(subs.latest_release_github_api)
+        subs.latest_version = apiResponse.data.tag_name
+
+        if (subs.latest_version) {
+          let stdout = await execSync(subs.version_command)
+          subs.current_version = stdout.toString().trim()
+          responseData[responseData.length] = subs
+        }
+      }
+    } catch (err) {
+      // ignore
+    }
+    instance.send(JSON.stringify(responseData))
+  })
+}
+
 function createWindow() {
+  // Create a WebSocket server that checks for latest releases of subscribed apps.
+  createWebSocketServer()
+
   // Create the browser window.
   win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1200,
+    height: 680,
     title: 'SignalingApp',
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone

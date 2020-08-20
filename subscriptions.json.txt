@@ -1,0 +1,1 @@
+[{"app_id": 1, "app_name": "Node.js", "version_command": "node --version", "latest_release_github_api": "https://api.github.com/repos/nodejs/node/releases/latest"}]

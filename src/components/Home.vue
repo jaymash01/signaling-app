@@ -1,22 +1,19 @@
 <template>
   <div id="home-container" class="text-center">
-    <div class="image-circle">
-      <img src="/images/search.png">
-    </div>
-    <br><br><br>
     <div class="subscriptions-list">
       <div class="subs-item text-left" v-for="(s, i) in subscriptions" :key="i.toString()">
         <div class="subs-item-marker text-center">
-          <span :class="{'red': s.outdated && hasScanned, 'green': ! s.outdated && hasScanned}"></span>
+          <span :class="{'red': s.current_version !== s.latest_version, 'green': s.current_version === s.latest_version}"></span>
         </div>
         <div class="subs-item-content">
-          <div class="heading">{{ s.appName }}</div>
-          <div class="hint">{{ s.currentVersion }}</div>
+          <div class="heading">{{ s.app_name }}</div>
+          <div class="hint row-group"><span class="label">Current Version</span><span class="value">{{ s.current_version }}</span></div>
+          <div class="hint row-group"><span class="label">Latest Version</span><span class="value">{{ s.latest_version }}</span></div>
         </div>
       </div>
     </div>
-    <br><br>
-    <button class="btn" type="button" @click="scan">Scan for Updates</button>
+    <br>
+    <div v-if="scanning" class="heading hint">Scanning</div>
   </div>
 </template>
 
@@ -25,43 +22,27 @@
     name: 'Home',
     data: () => {
       return {
-        hasScanned: false,
-        subscriptions: [
-          {
-            appName: 'Node.js',
-            currentVersion: '12.18.3',
-            versionCommand: 'node -v',
-            releasesRepo: 'https://nodejs.org/dist/latest',
-            outdated: true,
-          },
-          {
-            appName: 'Python',
-            currentVersion: '3.7.4',
-            versionCommand: 'python --version',
-            releasesRepo: 'https://nodejs.org/dist/latest',
-            outdated: true,
-          },
-          {
-            appName: 'Node.js',
-            currentVersion: '12.18.3',
-            versionCommand: 'node -v',
-            releasesRepo: 'https://nodejs.org/dist/latest',
-            outdated: true,
-          }
-        ]
+        scanning: true,
+        subscriptions: [],
       }
+    },
+    mounted() {
+      this.scan()
     },
     methods: {
       scan() {
-        let self = this, i = 0
+        let self = this
+        let socket = new WebSocket('ws://localhost:1445/')
 
-        self.hasScanned = false
-
-        for (; i < self.subscriptions.length; i++) {
-          self.subscriptions[i].outdated = Math.random() > 0.5 ? true : false
+        socket.onmessage = event => {
+          self.subscriptions = JSON.parse(event.data)
+          self.scanning = false
         }
 
-        self.hasScanned = true
+        socket.onerror = event => {
+          // ignore
+          self.scanning = false
+        }
       }
     }
   }
@@ -69,13 +50,12 @@
 
 <style scoped>
   #home-container {
-    padding-top: calc(var(--padding) * 5);
+    padding: var(--padding)
   }
 
   .subscriptions-list {
     background-color: var(--color-transparent);
-    border-radius: 2px;
-    padding: calc(var(--padding) * 2);
+    padding: calc(var(--padding) * 2)
   }
 
   .subs-item {
@@ -109,6 +89,21 @@
   }
 
   .subs-item-content {
-    flex: 5
+    flex: 9
+  }
+
+  .subs-item-content .hint {
+    font-size: 14px;
+    display: flex;
+    flex-direction: row;
+    width: 200px
+  }
+
+  .subs-item-content .hint .label {
+    flex: 3
+  }
+
+  .subs-item-content .hint .value {
+    flex: 1
   }
 </style>

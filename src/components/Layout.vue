@@ -70,12 +70,11 @@
 
   #side-nav a {
     display: block;
-    border-radius: 2px;
-    padding: var(--padding)
+    padding: var(--padding);
+    border-bottom: 1px solid var(--color-primary)
   }
 
   #side-nav a.active {
-    color: var(--color-accent);
-    background-color: var(--text-color);
+    color: var(--color-accent)
   }
 </style>
