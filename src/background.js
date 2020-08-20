@@ -50,7 +50,7 @@ function createWebSocketServer() {
         subs.latest_version = apiResponse.data.tag_name
 
         if (subs.latest_version) {
-          let stdout = await execSync(subs.version_command)
+          let stdout = execSync(subs.version_command)
           subs.current_version = stdout.toString().trim()
           responseData[responseData.length] = subs
         }
