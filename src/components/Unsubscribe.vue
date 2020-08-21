@@ -56,7 +56,7 @@
             self.submissionEnabled = true
           })
           .catch(error => {
-            vAlert.showError('Something went wrong.');
+            vAlert.showError('Something went wrong.')
             self.submissionEnabled = true
           })
       }
