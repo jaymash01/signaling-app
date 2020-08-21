@@ -20,6 +20,53 @@ protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ])
 
+function createHttpServer() {
+  let server = createServer((request, response) => {
+    response.setHeader('Access-Control-Allow-Origin', '*')
+
+    let url = request.url
+    switch (url) {
+      case '/subscriptions': {
+        let data = fs.readFileSync('subscriptions.json.txt', 'utf8')
+
+        response.writeHead(200, 'Content-Type', 'application/json')
+        response.end(data)
+      }
+        break
+      case '/subscriptions/add': {
+        let body = ''
+        request.on('data', chunk => {
+          body += chunk
+        })
+        request.on('end', () => {
+          body = JSON.parse(body)
+          body.added.app_id = new Date().getTime()
+          body.current.push(body.added)
+          fs.writeFileSync('subscriptions.json.txt', JSON.stringify(body.current))
+          response.writeHead(200, 'Content-Type', 'application/json')
+          response.end(JSON.stringify({message: 'Subscription added.'}))
+        })
+      }
+        break
+      case '/subscriptions/update': {
+        let body = ''
+        request.on('data', chunk => {
+          body += chunk
+        })
+        request.on('end', () => {
+          body = JSON.parse(body)
+          fs.writeFileSync('subscriptions.json.txt', JSON.stringify(body))
+          response.writeHead(200, 'Content-Type', 'application/json')
+          response.end(JSON.stringify({message: 'Success.'}))
+        })
+      }
+        break
+    }
+  })
+
+  server.listen(1440, () => console.log('HTTP server running on port 1440'))
+}
+
 function createWebSocketServer() {
   let wss = new WebSocket.Server({
     port: 1445,
@@ -63,6 +110,8 @@ function createWebSocketServer() {
 }
 
 function createWindow() {
+  // Create a HTTP server
+  createHttpServer()
   // Create a WebSocket server that checks for latest releases of subscribed apps.
   createWebSocketServer()
 
@@ -70,6 +119,8 @@ function createWindow() {
   win = new BrowserWindow({
     width: 1200,
     height: 680,
+    minWidth: 1080,
+    minHeight: 600,
     title: 'SignalingApp',
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
