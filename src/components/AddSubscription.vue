@@ -1,5 +1,5 @@
 <template>
-  <Modal title="Add Subscription">
+  <modal title="Add Subscription">
     <div class="section">
       <div class="input-group">
         <span class="label">App Name*</span>
@@ -19,7 +19,7 @@
       <button class="btn text-upper" type="button" v-enabled="submissionEnabled" @click="submit">Submit</button>
     </div>
     <br>
-  </Modal>
+  </modal>
 </template>
 
 <script>

@@ -10,10 +10,10 @@
       </div>
       <ul id="side-nav">
         <li>
-          <router-link to="/" :class="{'active': $route.path === '/'}">Scan</router-link>
+          <router-link to="/" :class="{ 'active': $route.path === '/' }">Scan</router-link>
         </li>
         <li>
-          <router-link to="/subscriptions" :class="{'active': $route.path === '/subscriptions'}">
+          <router-link to="/subscriptions" :class="{ 'active': $route.path === '/subscriptions' }">
             Subscriptions
           </router-link>
         </li>
@@ -23,7 +23,7 @@
       <slot/>
     </main>
     <component :is="modal.component" :data="modal.data" :context="modal.context"/>
-    <Alert ref="alert"/>
+    <alert ref="alert"/>
   </div>
 </template>
 

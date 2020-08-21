@@ -1,5 +1,5 @@
 <template>
-  <Modal title="Unsubscribe">
+  <modal title="Unsubscribe">
     <div class="section">
       <div class="heading">Unsubscribe {{ data.app_name }} ?</div>
     </div>
@@ -10,7 +10,7 @@
       <button class="btn text-upper" type="button" v-enabled="submissionEnabled" @click="submit">Yes</button>
     </div>
     <br>
-  </Modal>
+  </modal>
 </template>
 
 <script>
