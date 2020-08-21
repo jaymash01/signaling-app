@@ -1,5 +1,5 @@
 <template>
-  <div id="modal" class="fadeIn" @click.self="hide">
+  <div id="modal" :style="{ top: pageYOffset + 'px' }" @click.self="hide">
     <div id="modal-content">
       <div id="modal-header">
         <span id="modal-title" v-html="title"></span>
@@ -16,6 +16,11 @@
   export default {
     name: 'Modal',
     props: ['title'],
+    data() {
+      return {
+        pageYOffset: window.pageYOffset
+      }
+    },
     methods: {
       hide() {
         this.$root.$emit('hide-modal')

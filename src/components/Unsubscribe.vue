@@ -33,7 +33,7 @@
         let self = this, vAlert = self.$parent.$refs.alert
         let data = []
 
-        self.context.subscriptions.forEach((e, i, a) => {
+        self.context.subscriptions.forEach((e) => {
           if (e.app_id !== self.data.app_id) {
             data[data.length] = e
           }
