@@ -8,6 +8,7 @@ import { createServer } from 'http'
 import WebSocket from 'ws'
 import fs from 'fs'
 import {execSync} from 'child_process'
+import path from 'path'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -121,7 +122,8 @@ function createWindow() {
     height: 680,
     minWidth: 1080,
     minHeight: 600,
-    title: 'SignalingApp',
+    title: 'Signaling App',
+    icon: path.join(__static, 'icon.png'),
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
