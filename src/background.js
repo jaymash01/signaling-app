@@ -7,7 +7,7 @@ import axios from 'axios'
 import { createServer } from 'http'
 import WebSocket from 'ws'
 import fs from 'fs'
-import {execSync} from 'child_process'
+import { execSync } from 'child_process'
 import path from 'path'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
